@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import IMG from "../../asset/Logo.png";
-import { IoIosSettings, IoIosNotifications, IoMdArrowDropright } from "react-icons/io";
+import { IoIosSettings, IoIosNotifications} from "react-icons/io";
 import { CiMenuBurger } from "react-icons/ci";
 import { CiCircleAlert } from "react-icons/ci";
 import {
-  MdRestaurantMenu,
+
   MdClose,
   MdOutlineAddCard,
   MdOutlinePostAdd,
