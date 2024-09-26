@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import IMG from "../../asset/Logo.png";
-import { IoIosSettings, IoIosNotifications } from "react-icons/io";
+import { IoIosSettings, IoIosNotifications, IoMdArrowDropright } from "react-icons/io";
 import { CiMenuBurger } from "react-icons/ci";
 import { CiCircleAlert } from "react-icons/ci";
 import {
-  MdRestaurantMenu,
   MdClose,
   MdOutlineAddCard,
   MdOutlinePostAdd,
@@ -26,15 +25,16 @@ import Admin_dashboard from "./Admin_dashboard";
 const Admin_nav = () => {
   const [open, setOpen] = useState(false);
   const [sideBar, setSideBar] = useState(false);
-  const [activeMenu, setActiveMenu] = useState(null);
   const [openSettings, setOpenSettings] = useState(false);
   const [openNotification, setOpenNotification] = useState(false);
+  const [openLogout, setOpenLogout] = useState(false); 
+  
 
   const { url } = useParams();
 
   const datas = [
-    { name: "Dashboard", icon: <RiDashboard3Line />, url: "dashboard" },
-    { name: "Manage Staff", icon: <MdManageAccounts />, url: "managestaff" },
+    { name: "Dashboard", icon: <RiDashboard3Line />, url: "dashboard", },
+    { name: "Manage Staff", icon: <MdManageAccounts />, url: "managestaff",list:["item one","item two"]},
     { name: "Manage Intern", icon: <PiStudentBold />, url: "manageintern" },
     { name: "Seats", icon: <MdEventSeat />, url: "seats" },
     { name: "Manage Fees", icon: <GiCash />, url: "managefees" },
@@ -56,6 +56,7 @@ const Admin_nav = () => {
       setActiveMenu(index);
     }
   };
+
   return (
     <>
       <div className="min-h-screen flex bg-[#DADFEF]">
@@ -86,15 +87,33 @@ const Admin_nav = () => {
                 className="text-2xl"
               />
             </div>
-            <span className="lg:block hidden">admin</span>
-            <img
-              src="https://bridgeon.in/model-01.svg"
-              alt="Admin"
-              className="w-10 h-10 rounded-full"
-            />
+            {/* Profile Div */}
+            <div
+              onClick={() => setOpenLogout(!openLogout)} // Toggle the dropdown on click
+              className="relative flex items-center space-x-2 cursor-pointer"
+            >
+              <span className="lg:block hidden">admin</span>
+              <img
+                src="https://bridgeon.in/model-01.svg"
+                alt="Admin"
+                className="w-10 h-10 rounded-full"
+              />
+
+              {/* Dropdown Menu for Logout */}
+              {openLogout && (
+                <div className="absolute right-0 top-12 bg-white shadow-md p-4 rounded-lg">
+                  <button
+                  
+                    className="px-4 py-2 text-sm bg-red-500 text-white rounded-lg"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </header>
-        {/* NotfiFivctionPop */}
+        {/* Notifications Popup */}
         {openNotification && (
           <div
             className=" fixed top-0 right-0 z-50 flex flex-col items-center justify-center gap-2 h-screen w-full
@@ -114,6 +133,7 @@ const Admin_nav = () => {
                   >
                     <CiCircleAlert className="text-2xl" />
                     alerrtttttt
+
                   </div>
                 ))}
             </div>
@@ -166,15 +186,22 @@ const Admin_nav = () => {
             <div className="flex justify-end">
               <MdClose onClick={() => setOpen(false)} className="text-2xl" />
             </div>
-            <img
+
+            <div  className="flex">
+            
+            <img 
               src="https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg"
               alt="Admin"
               className="w-10 h-10 rounded-full"
             />
-
+       
             <div className="flex gap-4 h-[40px] w-[100px] justify-center items-center">
               <IoIosSettings className="text-2xl" />
             </div>
+
+            </div>
+         
+          
             <div className="p-1 flex flex-col gap-2 ">
               {buttons.map((x, index) => (
                 <div
@@ -197,31 +224,40 @@ const Admin_nav = () => {
             } md:w-64 bg-[#FFFDFD] md:p-5 p-1 fixed transition-all duration-300 h-[100vh] shadow-lg`}
           >
             <nav className="space-y-3 flex flex-col gap-4 justify-center m-auto">
-              {datas.map((e, index) => (
-                <Link
-                  to={`/admin/${e.url}`}
-                  onClick={() => setSideBar(!sideBar)}
-                  key={index}
-                  className={`flex justify-center gap-3 items-center md:py-2 md:px-4 rounded-lg bg-[#13425c] text-white transition-all duration-300 h-[45px] md:w-[200px] w-full hover:bg-[#e16a80] 
-                    ${url === e.url && "bg-[#e64c67]"}`}
-                >
-                  <div>{e.icon}</div>
-                  <span
-                    className={` ${sideBar ? "block" : "hidden md:block "}`}
-                  >
-                    <div className="w-[150px] ">{e.name}</div>
-                  </span>
-                </Link>
-              ))}
+            {datas.map((e, index) => (
+  <div className="relative" key={index}>
+    <Link
+      to={`/admin/${e.url}`}
+      onClick={() => setSideBar(!sideBar)}
+      className={`flex justify-center gap-3 items-center md:py-2 md:px-4 rounded-lg bg-[#13425c] text-white transition-all duration-300 h-[45px] md:w-[200px] w-full hover:bg-[#e16a80] 
+        ${url === e.url ? "bg-[#e64c67]" : ""}`}
+    >
+      <div>{e.icon}</div>
+      <span className={` ${sideBar ? "block" : "hidden md:block "}`}>
+        <div className="w-[150px] truncate">{e.name}</div>
+        <span className="flex">{e.arrow}</span>
+      </span>
+    </Link>
+
+    {e.list && (
+      <div className={`absolute top-full left-0 mt-2 w-full bg-white rounded-lg shadow-lg p-3 z-50 transition-all duration-300 transform ${sideBar ? 'opacity-100 scale-100' : 'opacity-0 scale-95 hidden'}`}>
+        {e.list.map((item, i) => (
+          <div key={i} className="flex mt-1 justify-center gap-3 items-center md:py-2 md:px-4 rounded-lg bg-[#13425c] text-white transition-all duration-300 h-[45px] md:w-[200px] w-full hover:bg-[#e16a80]">
+            {item}
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+))}
+
+
             </nav>
           </aside>
 
           {/* Content Div */}
           <div className="overflow-auto justify-center items-center text-white w-[100%]">
-
-          {url==="dashboard"?<Admin_dashboard/>:<></>}
-
-
+            {url === "dashboard" ? <Admin_dashboard /> : <></>}
           </div>
 
         </div>
